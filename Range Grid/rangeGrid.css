@@ -1,0 +1,44 @@
+.range-grid-container{
+    display: grid;
+    grid-template-columns: repeat(13, 1fr);
+    grid-template-rows: repeat(13, 1fr);
+    width: 800px;
+    height: 700px;
+    gap: 4px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.cell-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align content to the left */
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+}
+
+.cell-container.suited{
+    background-color: rgb(43, 107, 136);
+}
+
+.cell-container.off-suit{
+    background-color: rgb(212, 181, 186);
+}
+
+.cell-container.pair{
+    background-color: rgb(44, 155, 90);
+}
+
+.cell-name {
+    align-self: flex-start; /* Align to the top left */
+}
+
+.cell-percentage {
+    align-self: center; /* Align to the center horizontally */
+    margin-top: auto; /* Push to the bottom */
+}
