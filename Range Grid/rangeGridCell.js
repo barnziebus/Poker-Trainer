@@ -4,13 +4,14 @@ export class GridCell{
     constructor(parentContainer, cellName, cellPercentages) {
         this.parentContainer = parentContainer;
         this.name = cellName;
-        this.cellSelected = false;
+        this.selected = false;
 
         this.cellElements = {};
+        this.percentages = {raise: 0, call: 0, fold: 0}
 
         this.createCell(parentContainer);
         this.setCellPercentages(cellPercentages);
-        this.setBackgroundCol(cellPercentages)
+        this.setBackgroundCol()
     }
 
     createCell(parentContainer) {
@@ -60,26 +61,26 @@ export class GridCell{
     }
 
     setCellSelected() {
-        if (this.cellSelected) {
+        if (this.selected) {
             this.cellElements.container.style.border = ""
-            this.cellSelected = false
+            this.selected = false
         } else {
             this.cellElements.container.style.border = "solid red 2px"
-            this.cellSelected = true
+            this.selected = true
         }
     }
 
-    setCellPercentages(cellPercentages) {
-        let raise = cellPercentages.raise ?? 0;
-        let call = cellPercentages.call ?? 0;
-        let fold = cellPercentages.fold ?? 0;
+    setCellPercentages() {
+        let raise = this.percentages.raise ?? 0;
+        let call = this.percentages.call ?? 0;
+        let fold = this.percentages.fold ?? 0;
         
 
         let text = `${raise}:${call}:${fold}`;
         this.cellElements["percentage"].innerText = text;
     }
 
-    setBackgroundCol(cellPercentages) {
+    setBackgroundCol() {
         // set the inital background colours for the suited, off suit and pairs
         if (this.name.charAt(this.name.length - 1) === "s") {
             this.cellElements['container'].classList.add("suited")
@@ -90,9 +91,9 @@ export class GridCell{
         }
 
         // adjust the coulors of the cells with specific actions
-        let raise = cellPercentages.raise ?? 0;
-        let call = cellPercentages.call ?? 0;
-        let fold = cellPercentages.fold ?? 0;
+        let raise = this.percentages.raise ?? 0;
+        let call = this.percentages.call ?? 0;
+        let fold = this.percentages.fold ?? 0;
 
         let backgroundCSS = ""
 
@@ -107,6 +108,14 @@ export class GridCell{
             this.cellElements["container"].style.background = backgroundCSS;
         }
                 
+    }
+
+    increasePercentage(action, increment) {
+        this.percentages[action] += increment;
+        console.log(this.percentages)
+
+        this.setCellPercentages();
+        this.setBackgroundCol()
     }
 }
 
@@ -128,9 +137,28 @@ const COMBOS = [
     ['A2o', 'K2o', 'Q2o', 'J2o', 'T2o', '92o', '82o', '72o', '62o', '52o', '42o', '32o', '22' ,], 
   ]
 
+let cells = []
+
 for (let x in COMBOS) {
     for (let y in COMBOS[x]) {
-        new GridCell(gridContainer, COMBOS[x][y], {})
+        let cell = new GridCell(gridContainer, COMBOS[x][y], {})
+        cells.push(cell)
+    }
+}
 
+document.addEventListener("keydown", (event) => {
+    console.log(event)
+    if (event.key === "ArrowRight") {
+        console.log("arrow up")
+        increasePercentage()
+    }
+})
+
+function increasePercentage() {
+    for (let i in cells) {
+        let cell = cells[i]
+        if (cell.selected) {
+            cell.increasePercentage("raise", 1)
+        }
     }
 }
