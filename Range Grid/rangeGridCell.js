@@ -59,16 +59,6 @@ export class GridCell{
         cellContainer.appendChild(cellPercentageEl);
     }
 
-    // setBackgroundCol(cellContainer) {
-    //     if (this.name.charAt(this.name.length - 1) === "s") {
-    //         this.cellElements['container'].classList.add("suited")
-    //     } else if (this.name.charAt(this.name.length - 1) === "o") {
-    //         this.cellElements['container'].classList.add("off-suit")
-    //     } else {
-    //         this.cellElements['container'].classList.add("pair")
-    //     }
-    // }
-
     setCellSelected() {
         if (this.cellSelected) {
             this.cellElements.container.style.border = ""
