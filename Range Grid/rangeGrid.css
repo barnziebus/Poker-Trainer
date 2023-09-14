@@ -23,15 +23,15 @@ body {
 }
 
 .cell-container.suited{
-    background-color: rgb(43, 107, 136);
+    background: linear-gradient(to right, rgb(43, 107, 136), rgb(43, 107, 136)) ;
 }
 
 .cell-container.off-suit{
-    background-color: rgb(212, 181, 186);
+    background: linear-gradient(to right, rgb(212, 181, 186), rgb(212, 181, 186));
 }
 
 .cell-container.pair{
-    background-color: rgb(44, 155, 90);
+    background: linear-gradient(to right, rgb(44, 155, 90), rgb(44, 155, 90));
 }
 
 .cell-name {

@@ -1,23 +1,26 @@
 console.log("Grid Cell")
 
 export class GridCell{
-    constructor(parentContainer, cellName) {
+    constructor(parentContainer, cellName, cellPercentages) {
         this.parentContainer = parentContainer;
         this.name = cellName;
         this.cellSelected = false;
 
-        this.cellElements = {}
+        this.cellElements = {};
 
-        this.createCell(parentContainer)
+        this.createCell(parentContainer);
+        this.setCellPercentages(cellPercentages);
+        this.setBackgroundCol(cellPercentages)
     }
 
     createCell(parentContainer) {
         let cellContainer = this.newCellContainer();
-        let cellNameEl = this.newNameElement(cellContainer);
-        let cellPercentageEl = this.newPercentageElement(cellContainer);
+        this.newNameElement(cellContainer);
+        this.newPercentageElement(cellContainer);
 
-        
         parentContainer.appendChild(cellContainer);
+
+        this.cellElements['container'] = cellContainer
     }
 
     newCellContainer() {
@@ -56,15 +59,15 @@ export class GridCell{
         cellContainer.appendChild(cellPercentageEl);
     }
 
-    setBackgroundCol(cellContainer) {
-        if (this.name.charAt(this.name.length - 1) === "s") {
-            cellContainer.classList.add("suited")
-        } else if (this.name.charAt(this.name.length - 1) === "o") {
-            cellContainer.classList.add("off-suit")
-        } else {
-            cellContainer.classList.add("pair")
-        }
-    }
+    // setBackgroundCol(cellContainer) {
+    //     if (this.name.charAt(this.name.length - 1) === "s") {
+    //         this.cellElements['container'].classList.add("suited")
+    //     } else if (this.name.charAt(this.name.length - 1) === "o") {
+    //         this.cellElements['container'].classList.add("off-suit")
+    //     } else {
+    //         this.cellElements['container'].classList.add("pair")
+    //     }
+    // }
 
     setCellSelected() {
         if (this.cellSelected) {
@@ -74,6 +77,46 @@ export class GridCell{
             this.cellElements.container.style.border = "solid red 2px"
             this.cellSelected = true
         }
+    }
+
+    setCellPercentages(cellPercentages) {
+        let raise = cellPercentages.raise ?? 0;
+        let call = cellPercentages.call ?? 0;
+        let fold = cellPercentages.fold ?? 0;
+        
+
+        let text = `${raise}:${call}:${fold}`;
+        this.cellElements["percentage"].innerText = text;
+    }
+
+    setBackgroundCol(cellPercentages) {
+        // set the inital background colours for the suited, off suit and pairs
+        if (this.name.charAt(this.name.length - 1) === "s") {
+            this.cellElements['container'].classList.add("suited")
+        } else if (this.name.charAt(this.name.length - 1) === "o") {
+            this.cellElements['container'].classList.add("off-suit")
+        } else {
+            this.cellElements['container'].classList.add("pair")
+        }
+
+        // adjust the coulors of the cells with specific actions
+        let raise = cellPercentages.raise ?? 0;
+        let call = cellPercentages.call ?? 0;
+        let fold = cellPercentages.fold ?? 0;
+
+        let backgroundCSS = ""
+
+        if (raise === 0 && call === 0 && fold === 0) {
+            backgroundCSS = ""
+        } else {
+            backgroundCSS = `linear-gradient(to right, 
+                #941414 0%, #941414 ${raise}%, 
+                #1f9414 ${raise}%, #1f9414 ${raise + call}%,
+                #143c94 ${raise + call}%, #143c94 100%)`
+            
+            this.cellElements["container"].style.background = backgroundCSS;
+        }
+                
     }
 }
 
@@ -97,8 +140,7 @@ const COMBOS = [
 
 for (let x in COMBOS) {
     for (let y in COMBOS[x]) {
-        console.log(x, y)
-        new GridCell(gridContainer, COMBOS[x][y])
+        new GridCell(gridContainer, COMBOS[x][y], {})
 
     }
 }
