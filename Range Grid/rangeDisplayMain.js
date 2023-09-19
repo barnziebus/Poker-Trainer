@@ -4,3 +4,9 @@ let RFI_100BB_LJ = {"Name":"RFI - 100BB - LJ", "22":{"raise":17}, "33":{"raise":
 
 let gridContainer = document.getElementById("rangGridContainer")
 let rangeGrid = new Grid(gridContainer, RFI_100BB_LJ)
+
+
+let clearRangeButton = document.getElementById("clear range button");
+clearRangeButton.addEventListener("click", () => {
+    rangeGrid.clearRange()
+})

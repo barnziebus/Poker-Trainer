@@ -31,6 +31,14 @@ export class Grid{
         };
     }
 
+    clearRange() {
+        for (let cell of this.cells) {
+            cell.percentages = {raise: 0, call: 0, fold: 0}
+            cell.setBackgroundCol()
+            cell.setCellPercentages()
+        };
+    }
+
 
     increasePercentage(action, increment) {
         for (let i in this.cells) {

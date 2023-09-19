@@ -3,7 +3,6 @@
     grid-template-columns: repeat(13, 1fr);
     grid-template-rows: repeat(13, 1fr);
     width: 800px;
-    height: 700px;
     gap: 4px;
 }
 
