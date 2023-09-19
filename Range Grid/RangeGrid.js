@@ -5,7 +5,12 @@ export class Grid{
 
         this.buildGrid(gridContainer);
         this.addUI()
-        if (range) {
+
+        let storedRange = this.loadRange()
+
+        if (storedRange) {
+            this.displayRange(storedRange)
+        } else if (range) {
             this.displayRange(range)
         }
     }
@@ -39,6 +44,43 @@ export class Grid{
         };
     }
 
+    saveRange() {
+        let savedRange = this.getRange()
+        console.log(savedRange)
+
+        let savedRangeJSON = JSON.stringify(savedRange)
+        localStorage.setItem("range", savedRangeJSON)
+    }
+
+    loadRange() {
+        let savedRangeJSON = localStorage.getItem("range");
+        if (savedRangeJSON !== null) {
+            let savedRange = JSON.parse(savedRangeJSON)
+            return savedRange
+        } 
+    }
+
+    getRange() {
+        let savedRange = {}
+        for (let cell of this.cells) {
+            if (cell.percentages["raise"] > 0 || cell.percentages['call'] > 0) {
+                let percentages = {}
+
+                if (cell.percentages["raise"] > 0) {
+                    percentages["raise"] = cell.percentages["raise"];
+                };
+                if (cell.percentages["call"] > 0) {
+                    percentages["call"] = cell.percentages["call"];
+                };
+
+
+                savedRange[cell.name] = percentages
+
+            }
+        };
+
+        return savedRange
+    }
 
     increasePercentage(action, increment) {
         for (let i in this.cells) {
