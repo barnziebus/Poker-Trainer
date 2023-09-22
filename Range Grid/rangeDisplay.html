@@ -8,11 +8,24 @@
 </head>
 <body>
     <div><h1>Hand Range Grid</h1></div>
-    <div id="rangGridContainer" class="range-grid-container"></div>
-
-    <div>
-        <button id="clear range button">Clear Range</button>
-        <button id="save range button">Save Range</button>
+    <div class="split-container">
+        <div class="left-container">
+            <h2>Range Grid</h2>
+            <div id="rangGridContainer" class="range-grid-container"></div>
+            <div class="button-container">
+                <button id="clear range button">Clear Range</button>
+                <button id="save range button">Save Range</button>
+                <button id="toggle action">Action = Raise</button>
+                <button id="print range">Print Range</button>
+            </div>
+        </div>
+        <div class="right-container">
+            <h2>Ranges</h2>
+            <div id="range selection container" class="simple-container"></div>
+            <div>
+                <p id="range output"></p>
+            </div>
+        </div>
     </div>
 
     <script src="rangeCell.js" type="module"></script>

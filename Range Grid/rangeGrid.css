@@ -2,17 +2,27 @@
     display: grid;
     grid-template-columns: repeat(13, 1fr);
     grid-template-rows: repeat(13, 1fr);
-    width: 800px;
+    min-width: 800px;
+    width: 100%;
+    height: 800px;
     gap: 4px;
 }
 
 body {
     font-family: Arial, sans-serif;
     background-color: rgb(5, 49, 54);
+    color: aliceblue;
 }
 
 h1 {
     color: aliceblue;
+    text-align: center;
+    vertical-align: center;
+}
+
+h2 {
+    color: aliceblue;
+    text-align: center;
 }
 
 .cell-container {
@@ -45,4 +55,28 @@ h1 {
 .cell-percentage {
     align-self: center; /* Align to the center horizontally */
     margin-top: auto; /* Push to the bottom */
+}
+
+.split-container {
+    display: flex;
+}
+
+.left-container {
+    background-color: transparent ;
+    width: 100%;
+    padding: 10px;
+}
+
+.right-container {
+    background-color: transparent;
+    padding: 10px;
+    width: 100%;
+}
+
+.button-container {
+    padding: 10px;
+}
+
+.simple-container {
+    padding: 5px;
 }

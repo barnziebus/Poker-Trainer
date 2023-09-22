@@ -1,0 +1,8 @@
+let rangeExample = {
+    name: "range example",
+    type: "RFI",
+    depth: 100BB,
+    range: {
+        "22": {raise: 25, call: 25}
+    }
+}

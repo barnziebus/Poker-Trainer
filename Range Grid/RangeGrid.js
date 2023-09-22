@@ -6,6 +6,8 @@ export class Grid{
         this.buildGrid(gridContainer);
         this.addUI()
 
+        this.action = "raise"
+
         let storedRange = this.loadRange()
 
         if (storedRange) {
@@ -25,6 +27,7 @@ export class Grid{
     }
 
     displayRange(range) {
+        this.clearRange()
         for (let cell of this.cells) {
             for (let hand in range) {
                 if (cell["name"] === hand) {
@@ -41,6 +44,14 @@ export class Grid{
             cell.percentages = {raise: 0, call: 0, fold: 0}
             cell.setBackgroundCol()
             cell.setCellPercentages()
+        };
+    }
+    
+    deselectAll() {
+        for (let cell of this.cells) {
+            if (cell.selected === true) {
+                cell.setCellSelected()
+            }
         };
     }
 
@@ -102,11 +113,16 @@ export class Grid{
 
     addUI() {
         document.addEventListener("keydown", (event) => {
+            //console.log(event)
             if (event.key === "ArrowRight") {
-                this.increasePercentage("raise", 1)
+                this.increasePercentage(this.action, 25)
             }
             if (event.key === "ArrowLeft") {
-                this.decreasePercentage("raise", 1)
+                this.decreasePercentage(this.action, 25)
+            }
+            if (event.key === "Escape") {
+                console.log("esc")
+                this.deselectAll()
             }
         }) 
     }
