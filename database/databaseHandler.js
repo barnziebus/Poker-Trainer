@@ -1,6 +1,7 @@
 // database handler class
 // import ranges to be appeneded to the dbhandler database of ranges
 import { RFI_Ranges } from "./Ranges/ranges_RFI.js";
+import { VS_RFI_Ranges } from "./Ranges/ranges_3-Bet.js";
 
 export class DatabaseHandler{
     constructor() {
@@ -16,6 +17,9 @@ export class DatabaseHandler{
         //Push all RFI ranges to the database array
         for (let range in RFI_Ranges) {
             this.ranges.push(RFI_Ranges[range])
+        }
+        for (let range in VS_RFI_Ranges) {
+            this.ranges.push(VS_RFI_Ranges[range])
         }
     }
 

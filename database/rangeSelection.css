@@ -16,10 +16,15 @@ h4 {
     padding-left: 15px;
 }
 
-ul {
-    padding: 0px;
-    padding-left: 50px;
-    margin: 2px;
+li {
+    padding-bottom: 5px;
+    border-radius: 3px;
+    user-select: none;
+    cursor: pointer;
+}
+
+li:hover {
+    background-color: rgb(7, 83, 83);
 }
 
 .hidden{
