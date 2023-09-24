@@ -8,7 +8,7 @@ function main() {
     
     let rangeGrid = new Grid(gridContainer)
     let rangeDbHandler = new DatabaseHandler(rangeSelectionContainer)
-    let rangeSelector = new RangePicker(rangeSelectionContainer, rangeDbHandler.ranges, rangeGrid)
+    let rangeSelector = new RangePicker(rangeSelectionContainer, rangeDbHandler, rangeGrid)
 
     setButtons(rangeGrid)
 }

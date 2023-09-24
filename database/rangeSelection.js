@@ -2,159 +2,136 @@
 import { RFI_Ranges } from "./Ranges/ranges_RFI.js";
 
 export class RangePicker{
-    constructor(rangePickerContainer, rangesDatabase, rangeGrid) {
+    constructor(rangePickerContainer, rangesDbHandler, rangeGridHandler) {
         this.parentContainer = rangePickerContainer;
-        this.rangesDb = rangesDatabase;
-        this.rangeGrid = rangeGrid
+        this.ranges = rangesDbHandler.ranges;
+        this.rangeGridHandler = rangeGridHandler;
 
-        this.types = []
+        this.structure = this.getSelectionStructure(this.ranges);
 
-        this.buildRangePicker(rangePickerContainer, rangesDatabase)
-        this.selectionStructure = this.buildSelectionStructure(rangesDatabase, rangePickerContainer)
-        console.log(this.selectionStructure)
+        this.createRangeSelector(this.parentContainer, this.structure, this.ranges)
     }
 
-    buildRangePicker(container, rangesDatabase) {
-        let listContainer = document.createElement("ul")
-        for (let range in rangesDatabase) {
-            let currentRange = rangesDatabase[range];
-            this.addOption(listContainer, currentRange.name)
-        }
-        container.appendChild(listContainer)
-    }
+    getRange(type, depth, positionName) {       
+        for (let range in this.ranges) {
+            let rangeInfo = this.ranges[range];
 
-    addOption(container, displayText) {
-        let listItem = document.createElement("li")
-        listItem.innerText = displayText
-        container.appendChild(listItem)
-        listItem.addEventListener("click", () => {
-            this.getRange(displayText)
-        })
-    }
+            if (rangeInfo.type === type && rangeInfo.depth === depth && rangeInfo.position === positionName) {
+                        return rangeInfo.range
+            };
+        };
+    };
 
-    getRange(rangeName) {
-        for (let range in this.rangesDb) {
-            let currentRange = this.rangesDb[range];
-            if (rangeName === currentRange.name) {
-                this.rangeGrid.displayRange(currentRange.range)
-                // set active range method call from range db handler
-            }
-        }
-    }
-
-    getDifferentTypes(rangesDatabase) {
-        let types = []
-        for (let range in rangesDatabase) {
-            let currentRange = rangesDatabase[range];
-
-            if (types.includes(currentRange.type))  {
-
-            } else {
-                types.push(currentRange.type)
-            }
-        }
-
-        return types
-    }
-
-    getDifferentDepths(rangesDatabase, type) {
-        let depths = []
-        for (let range in rangesDatabase) {
-            let currentRange = rangesDatabase[range];
-
-            if (depths.includes(currentRange[type]["depth"])) {
-
-            } else {
-                depths.push(currentRange[type]["depth"])
-            }
-        }
-
-        return depths
-    }
-
-    buildSelectionStructure(rangesDatabase, parentContainer) {
-        let structure = {}
-        let elements = {}
+    getSelectionStructure(rangesDatabase) {
+        let structure = {};
         
         rangesDatabase.forEach(item => {
             const { type, depth, position } = item;
 
             if (!structure[type]) {
-                structure[type] = {}
-                // build type container
-                let typeContainer = this.createTypeElement(parentContainer, type)
-                elements[type] = typeContainer
+                structure[type] = {};
             }
 
             if (!structure[type][depth]) {
-                structure[type][depth] = {}
-                let depthContainer = this.createDepthElement(elements[type], depth)
-                elements[type][depth] = depthContainer
+                structure[type][depth] = {};
             }
 
-            structure[type][depth][position] = item
-            this.createRangeElement(elements[type][depth], position)
+            structure[type][depth][position] = item;
         });
 
-        console.log(elements)
+        return structure;
+    };
 
-        this.setListeners(elements)
+    createRangeSelector(parentContainer, structure) {
+        let rangeTypes = []
+        for (let type in structure) {
+            rangeTypes.push(type)
 
-        return structure
-    }
+            let typeSelectionElements = this.createTypeSelection(parentContainer, type);
+            let typeContainer = typeSelectionElements[0];
+            let typeHeader = typeSelectionElements[1];
 
-    createTypeElement(parentContainer, type) {
-        let typeContainer = document.createElement("div");
-        let typeHeading = document.createElement("h3");
-        typeHeading.innerText = type
 
-        typeContainer.className = "type-container"
+            let typeDepths = []
+            for (let depth in structure[type]) {
+                typeDepths.push(depth);
 
-        typeContainer.appendChild(typeHeading)
-        parentContainer.appendChild(typeContainer)
+                let depthSelectionElement = this.createRangeDepthSelection(typeContainer, typeHeader, depth);
+                let depthContainer = depthSelectionElement[0];
+                let depthHeader = depthSelectionElement[1];
+                
+                let rangeNames = []
+                for (let name in structure[type][depth]) {
+                    rangeNames.push(name)
+                }
 
-        return typeContainer
-    }
-
-    createDepthElement(parentContainer, depth) {
-        let depthContainer = document.createElement("div");
-        let depthHeading = document.createElement("h4");
-        depthHeading.innerText = depth
-
-        depthContainer.className = "depth-container"
-
-        depthContainer.appendChild(depthHeading)
-
-        if (parentContainer) {
-
-            parentContainer.appendChild(depthContainer)
+                this.createRangeNameList(depthContainer, depthHeader, rangeNames, type, depth)
+            }
         }
-
-        return depthContainer
     }
 
-    createRangeElement(parentContainer, position) {
-        let posisitonList = document.createElement("ul")
-        let positionEl = document.createElement("li")
-        positionEl.innerText = position
-        posisitonList.appendChild(positionEl)
-        parentContainer.appendChild(posisitonList)
+    createTypeSelection(parentContainer, typeName) {
+        // create the type selection and return the type container and header element
+        let typeContainer = document.createElement("div");
+        let typeHeader = document.createElement("h3");
+        typeHeader.innerText = typeName;
+
+        typeContainer.appendChild(typeHeader);
+
+        parentContainer.appendChild(typeContainer);
+
+        return [typeContainer, typeHeader];
     }
 
-    toggleHidden(clickableEl, elToHide) {
-        clickableEl.addEventListener("click", () => {
-            console.log(clickableEl, elToHide)
+    createRangeDepthSelection(parentContainer, parentHeader, rangeDepth) {
+        let depthContainer = document.createElement("div"); // remove this container and constuct from type
+        let depthHeader = document.createElement("h4");
+
+        depthHeader.innerText = rangeDepth;
+
+        depthContainer.appendChild(depthHeader);
+
+        parentHeader.addEventListener("click", () => {
+            if (depthContainer.style.display === 'none') {
+                depthContainer.style.display = ''; //show the list appended to the type
+            } else {
+                depthContainer.style.display = 'none'; //hide the list appended to the type
+            };
+        });
+
+        parentContainer.appendChild(depthContainer);
+
+        return [depthContainer, depthHeader];
+    };
+
+    createRangeNameList(parentContainer, parentHeader, rangeNames, type, depth) {
+        let listContainer = document.createElement("ui");
+
+        for (let range in rangeNames) {
+            let rangeName = rangeNames[range];
+
+            this.createRangeNameSelection(listContainer, rangeName, type, depth);
+        };
+
+        parentContainer.appendChild(listContainer);
+
+        parentHeader.addEventListener("click", () => {
+            if (listContainer.style.display === 'none') {
+                listContainer.style.display = ''; //show the list appended to the depth
+            } else {
+                listContainer.style.display = 'none'; //hide the list appended to the depth
+            };
         });
     };
 
-    setListeners(elements) {
-        for (let typeEl in elements) {
-            let currentTypeEl = elements[typeEl];
-            for (let depthEl in currentTypeEl) {
-                let currentDepthEl = currentTypeEl[depthEl]
-                this.toggleHidden(currentTypeEl, currentDepthEl)
-            }
+    createRangeNameSelection(parentContainer, rangeName, type, depth) {
+        let positionEl = document.createElement("li");
+        positionEl.innerText = rangeName;
 
-        }
+        positionEl.addEventListener("click", () => {
+            this.rangeGridHandler.displayRange(this.getRange(type, depth, rangeName));
+        })
+
+        parentContainer.appendChild(positionEl);
     }
 }
