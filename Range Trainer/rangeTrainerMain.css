@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(5, 49, 54);
+    color: aliceblue;
+}
+
+.split-container {
+    display: flex;
+}
+
+.left-container {
+    background-color: transparent ;
+    width: 100%;
+    padding: 10px;
+}
+
+.right-container {
+    background-color: transparent;
+    padding: 10px;
+    width: 100%;
+}
+
+.hand-container {
+    display: flex;
+}
+
+.card {
+    width: 200px;
+    padding: 10px;
+}
