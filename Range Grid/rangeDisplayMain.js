@@ -6,11 +6,17 @@ function main() {
     let gridContainer = document.getElementById("rangGridContainer")
     let rangeSelectionContainer = document.getElementById("range selection container");
     
-    let rangeGrid = new Grid(gridContainer)
     let rangeDbHandler = new DatabaseHandler(rangeSelectionContainer)
-    let rangeSelector = new RangePicker(rangeSelectionContainer, rangeDbHandler, rangeGrid)
+    let rangeGrid = new Grid(gridContainer, rangeDbHandler)
+    let rangeSelector = new RangePicker(rangeSelectionContainer, rangeDbHandler, changeRange)
 
     setButtons(rangeGrid)
+
+    function changeRange(rangeInfo) {
+        let activeRangeInfo = rangeInfo
+        rangeDbHandler.setActiveRange(rangeInfo)
+        rangeGrid.displayRange(activeRangeInfo.range)
+    }
 }
 
 function setButtons(rangeGrid) {
@@ -19,6 +25,7 @@ function setButtons(rangeGrid) {
     setTogActionButton(rangeGrid)
     setPrintRangeButton(rangeGrid) 
 }
+
 
 function setClearRangeButton(rangeGrid) {
     let clearRangeButton = document.getElementById("clear range button");

@@ -5,9 +5,8 @@ import { DatabaseHandler } from "../database/databaseHandler.js";
 import { Dealer } from "./dealer.js";
 import { CardHandler } from "./cardHandler.js";
 
-let rangeGrid = null
 let rangesHandler = new DatabaseHandler()
-let rangeSelection = new RangePicker(document.getElementById("range selection container"), rangesHandler, rangeGrid)
+let rangeSelection = new RangePicker(document.getElementById("range selection container"), rangesHandler, changeRange)
 let dealer = new Dealer()
 let cardHandler = new CardHandler()
 
@@ -66,4 +65,8 @@ function isHandInRange(combo, action, range) {
         //console.log("incorrect");
         //console.log(rangeActions)
     }
+}
+
+function changeRange(range) {
+    console.log("change range", range)
 }

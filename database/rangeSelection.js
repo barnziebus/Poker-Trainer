@@ -2,22 +2,22 @@
 import { RFI_Ranges } from "./Ranges/ranges_RFI.js";
 
 export class RangePicker{
-    constructor(rangePickerContainer, rangesDbHandler, rangeGridHandler) {
+    constructor(rangePickerContainer, rangesDbHandler, changeRange) {
         this.parentContainer = rangePickerContainer;
         this.ranges = rangesDbHandler.ranges;
-        this.rangeGridHandler = rangeGridHandler;
+        this.changeRange = changeRange;
 
         this.structure = this.getSelectionStructure(this.ranges);
 
         this.createRangeSelector(this.parentContainer, this.structure, this.ranges)
     }
 
-    getRange(type, depth, positionName) {       
+    getRangeInfo(type, depth, positionName) {       
         for (let range in this.ranges) {
             let rangeInfo = this.ranges[range];
 
             if (rangeInfo.type === type && rangeInfo.depth === depth && rangeInfo.position === positionName) {
-                        return rangeInfo.range
+                        return rangeInfo
             };
         };
     };
@@ -129,7 +129,8 @@ export class RangePicker{
         positionEl.innerText = rangeName;
 
         positionEl.addEventListener("click", () => {
-            this.rangeGridHandler.displayRange(this.getRange(type, depth, rangeName));
+            let outputRange = this.getRangeInfo(type, depth, rangeName)
+            this.changeRange(outputRange);
         })
 
         parentContainer.appendChild(positionEl);

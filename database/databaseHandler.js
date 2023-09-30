@@ -23,7 +23,7 @@ export class DatabaseHandler{
         }
     }
 
-    setActiveRange(rangeName) {
+    setActiveRange(rangeInfo) {
         // sets the active range based on the name input. 
         // calls the set ranges to set the previous and active range.
         console.log("Set Range - Method Called");
@@ -31,7 +31,7 @@ export class DatabaseHandler{
 
         for (let I in database) {
             let range = database[I]
-            if (rangeName === range.name) {
+            if (rangeInfo.name === range.name) {
                 console.log(`Active Range Set: ${range.name}`, range)
                 this.setRanges(range) //sets the active range and updates the previous
             } 

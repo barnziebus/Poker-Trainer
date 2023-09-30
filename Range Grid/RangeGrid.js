@@ -1,6 +1,8 @@
 import { ComboCell } from "./rangeCell.js"
 export class Grid{
-    constructor(gridContainer, range) {
+    constructor(gridContainer, rangeDBhandler) {
+        this.rangeDBhandler = rangeDBhandler
+
         this.cells = [];
 
         this.buildGrid(gridContainer);
@@ -12,8 +14,6 @@ export class Grid{
 
         if (storedRange) {
             this.displayRange(storedRange)
-        } else if (range) {
-            this.displayRange(range)
         }
     }
 
