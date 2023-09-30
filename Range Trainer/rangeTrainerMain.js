@@ -16,22 +16,29 @@ let secondCardEl = document.getElementById("second card")
 
 let hands = dealer.dealHands(1)
 let hand = hands[0]
-let practiceRangeInfo = rangesHandler.ranges[0]
-let practiceRange = rangesHandler.ranges[0]["range"]
+let practiceRangeInfo = rangesHandler.ranges[19]
+let practiceRange = practiceRangeInfo.range
 
 cardHandler.refreshCardDisplay(hand, firstCardEl, secondCardEl)
 
 
 
 let raiseButton = document.getElementById("raise button")
+let callButton = document.getElementById("call button")
+let foldButton = document.getElementById("fold button")
+
 raiseButton.addEventListener("click", () => {
+    isHandInRange(hand["Combo"], "raise", practiceRange)
+    newHand()
+})
 
-    if (hand["Combo"] in practiceRange) {
-        console.log("correct")
-    }   else {
-        console.log("incorrect")
-    }
+callButton.addEventListener("click", () => {
+    isHandInRange(hand["Combo"], "call", practiceRange)
+    newHand()
+})
 
+foldButton.addEventListener("click", () => {
+    isHandInRange(hand["Combo"], "fold", practiceRange)
     newHand()
 })
 
@@ -40,4 +47,23 @@ function newHand() {
     hand = hands[0]
 
     cardHandler.refreshCardDisplay(hand, firstCardEl, secondCardEl)
+}
+
+function isHandInRange(combo, action, range) {
+    let rangeActions = {"raise": 0, "call":0, "fold": 100}
+    
+    if (combo in range) {
+        rangeActions[action] += range[combo][action] 
+        rangeActions["fold"] -= range[combo][action] 
+    }
+    
+    if (rangeActions[action] > 0) {
+        return true
+        //console.log("correct")
+        //console.log(rangeActions)
+    } else {
+        return false
+        //console.log("incorrect");
+        //console.log(rangeActions)
+    }
 }
