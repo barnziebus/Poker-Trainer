@@ -15,29 +15,63 @@ let secondCardEl = document.getElementById("second card")
 
 let hands = dealer.dealHands(1)
 let hand = hands[0]
-let practiceRangeInfo = rangesHandler.ranges[19]
+let practiceRangeInfo = rangesHandler.ranges[0]
 let practiceRange = practiceRangeInfo.range
 
 cardHandler.refreshCardDisplay(hand, firstCardEl, secondCardEl)
 
+let outputEls = {
+    "attempts": document.getElementById("attempts output"),
+    "correct": document.getElementById("correct output"),
+    "incorrect": document.getElementById("incorrect output"),
+}
 
+let playerScore = {
+    "attempts": 0,
+    "correct": 0,
+    "incorrect": 0,
+}
 
 let raiseButton = document.getElementById("raise button")
 let callButton = document.getElementById("call button")
 let foldButton = document.getElementById("fold button")
 
 raiseButton.addEventListener("click", () => {
-    isHandInRange(hand["Combo"], "raise", practiceRange)
+    if (isHandInRange(hand["Combo"], "raise", practiceRange)) {
+        playerScore.correct += 1;
+    } else {
+        playerScore.incorrect += 1;
+    }
+    
+    playerScore.attempts += 1;
+    updatePlayerScore()
+
     newHand()
 })
 
 callButton.addEventListener("click", () => {
-    isHandInRange(hand["Combo"], "call", practiceRange)
+    if (isHandInRange(hand["Combo"], "call", practiceRange)) {
+        playerScore.correct += 1;
+    } else {
+        playerScore.incorrect += 1;
+    }
+    
+    playerScore.attempts += 1;
+    updatePlayerScore()
+    
     newHand()
 })
 
 foldButton.addEventListener("click", () => {
-    isHandInRange(hand["Combo"], "fold", practiceRange)
+    if (isHandInRange(hand["Combo"], "fold", practiceRange)) {
+        playerScore.correct += 1;
+    } else {
+        playerScore.incorrect += 1;
+    }
+    
+    playerScore.attempts += 1;
+    updatePlayerScore()
+
     newHand()
 })
 
@@ -56,6 +90,8 @@ function isHandInRange(combo, action, range) {
         rangeActions["fold"] -= range[combo][action] 
     }
     
+    console.log(combo, action, rangeActions, range)
+    
     if (rangeActions[action] > 0) {
         return true
         //console.log("correct")
@@ -67,6 +103,13 @@ function isHandInRange(combo, action, range) {
     }
 }
 
+function updatePlayerScore() {
+    outputEls.correct.innerText = playerScore.correct
+    outputEls.incorrect.innerText = playerScore.incorrect
+    outputEls.attempts.innerText = playerScore.attempts
+}
+
 function changeRange(range) {
-    console.log("change range", range)
+    practiceRange = range.range
+    console.log("change range", practiceRange)
 }
